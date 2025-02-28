@@ -11,9 +11,9 @@ type InitialData = {
   fullName: string;
 };
 
-const ONE_DAY_IN_MS = 24 * 60 * 60 * 1000;
-const THREE_DAYS_IN_MS = 3 * ONE_DAY_IN_MS;
-const THIRTY_DAYS_IN_MS = 30 * ONE_DAY_IN_MS;
+const ONE_DAY_IN_SEC = 24 * 60 * 60;
+const THREE_DAYS_IN_SEC = 3 * ONE_DAY_IN_SEC;
+const THIRTY_DAYS_IN_SEC = 30 * ONE_DAY_IN_SEC;
 
 const getUserState = async (email: string): Promise<UserState> => {
   const user = await db.select().from(users).where(eq(users.email, email));
@@ -24,7 +24,7 @@ const getUserState = async (email: string): Promise<UserState> => {
   const now = new Date();
   const timeDiff = now.getTime() - lastActivityDate.getTime();
 
-  if (timeDiff > THREE_DAYS_IN_MS && timeDiff <= THIRTY_DAYS_IN_MS) {
+  if (timeDiff > THREE_DAYS_IN_SEC && timeDiff <= THIRTY_DAYS_IN_SEC) {
     return "non-active";
   }
 
@@ -42,7 +42,7 @@ export const { POST } = serve<InitialData>(async (context) => {
     });
   });
 
-  await context.sleep("wait-for-3-days", THREE_DAYS_IN_MS);
+  await context.sleep("wait-for-3-days", THREE_DAYS_IN_SEC);
 
   while (true) {
     const state = await context.run("check-user-state", async () => {
@@ -67,6 +67,6 @@ export const { POST } = serve<InitialData>(async (context) => {
       });
     }
 
-    await context.sleep("wait-for-1-month", THIRTY_DAYS_IN_MS);
+    await context.sleep("wait-for-1-month", THIRTY_DAYS_IN_SEC);
   }
 });
