@@ -3,7 +3,6 @@ import Header from "@/components/Header";
 import { db } from "@/db/drizzle";
 import { users } from "@/db/schema";
 import { eq } from "drizzle-orm";
-import { User } from "next-auth";
 import { redirect } from "next/navigation";
 import { after } from "next/server";
 import { ReactNode } from "react";
@@ -25,7 +24,7 @@ const layout = async ({ children }: { children: ReactNode }) => {
 
     await db
       .update(users)
-      .set({ lastActivityDate: new Date().toDateString().slice(0, 10) })
+      .set({ lastActivityDate: new Date().toISOString().slice(0, 10) })
       .where(eq(users.id, session?.user?.id));
   });
 

@@ -23,7 +23,7 @@ const Header = ({ session }: { session: Session }) => {
               pathName === "library" ? "text-light-200" : "text-light-100"
             )}
           >
-            Library
+            Search
           </Link>
         </li>
         <li>
